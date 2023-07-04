@@ -1,3 +1,9 @@
 {
-    "editor.autoClosingBrackets": "languageDefined"
+    "editor.autoClosingBrackets": "languageDefined",
+    "prettier.singleQuote": false,
+    "dart.lineLength": 80,
+    "editor.suggest.insertMode": "replace",
+    "editor.tabCompletion": "on",
+    "javascript.suggest.completeFunctionCalls": false,
+    "editor.guides.bracketPairs": "active"
 }

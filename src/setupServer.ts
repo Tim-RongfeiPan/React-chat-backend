@@ -1,21 +1,23 @@
-import { Application, json, urlencoded, Request, Response, NextFunction } from "express";
+import { Application, json, urlencoded, Request, Response, NextFunction } from 'express';
 
-import http from "http";
+import http from 'http';
 
-import cors from "cors";
+import cors from 'cors';
 
-import helmet from "helmet";
-import hpp from "hpp";
-import cookieSession from "cookie-session";
+import helmet from 'helmet';
+import hpp from 'hpp';
+import compression from 'compression';
+import cookierSession from 'cookie-session';
 
-import "express-serve-static-core";
-import HTTP_STATUS from "http-status-codes";
-import compression from "compression";
+import HTTP_STATUS from 'http-status-codes';
+
+import 'express-async-errors';
 
 const SERVER_PORT = 5000;
 
-export class nodechatServer {
+export class NodechatServer {
 	private app: Application;
+
 	constructor(app: Application) {
 		this.app = app;
 	}
@@ -30,9 +32,9 @@ export class nodechatServer {
 
 	private securityMiddleware(app: Application): void {
 		app.use(
-			cookieSession({
-				name: "session",
-				keys: ["test1", "test2"],
+			cookierSession({
+				name: 'session',
+				keys: ['test1', 'test2'],
 				maxAge: 24 * 7 * 60 * 60 * 1000,
 				secure: false,
 			})
@@ -41,18 +43,18 @@ export class nodechatServer {
 		app.use(helmet());
 		app.use(
 			cors({
-				origin: "*",
+				origin: '*',
 				credentials: true,
 				optionsSuccessStatus: 200,
-				methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+				methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 			})
 		);
 	}
 
 	private standardMiddleware(app: Application): void {
 		app.use(compression());
-		app.use(json({ limit: "50mb" }));
-		app.use(urlencoded({ extended: true, limit: "50mb" }));
+		app.use(json({ limit: '50mb' }));
+		app.use(urlencoded({ extended: true, limit: '50mb' }));
 	}
 	private routesMiddleware(app: Application): void {}
 	private apiMonitoring(app: Application): void {}
@@ -66,11 +68,11 @@ export class nodechatServer {
 		}
 	}
 
-	private createhttpServer(httpServer: http.Server): void {}
+	private creatSocketIO(httpServer: http.Server): void {}
 
 	private starthttpServer(httpServer: http.Server): void {
 		httpServer.listen(SERVER_PORT, () => {
-			console.log("server running on port number: ${SERVER_PORT}");
+			console.log(`Server running on port ${SERVER_PORT}`);
 		});
 	}
 }
