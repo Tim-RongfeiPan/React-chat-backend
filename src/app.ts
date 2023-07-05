@@ -1,21 +1,21 @@
-import express, { Express } from "express";
+import express, { Express } from 'express';
 
-import { NodechatServer } from "./setupServer";
-import dbConnection from "./setupDatabase";
-import { config } from "./config";
-
+import { NodechatServer } from './setupServer';
+import dbConnection from './setupDatabase';
+import { config } from './config';
+import Logger from 'bunyan';
 class Application {
-	public initialize(): void {
-		this.loadConfig();
-		dbConnection();
-		const app: Express = express();
-		const server: NodechatServer = new NodechatServer(app);
-		server.start();
-	}
+  public initialize(): void {
+    this.loadConfig();
+    dbConnection();
+    const app: Express = express();
+    const server: NodechatServer = new NodechatServer(app);
+    server.start();
+  }
 
-	private loadConfig(): void {
-		config.Validation();
-	}
+  private loadConfig(): void {
+    config.Validation();
+  }
 }
 
 const application: Application = new Application();

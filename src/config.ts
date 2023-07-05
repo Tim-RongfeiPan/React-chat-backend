@@ -1,4 +1,6 @@
 import dotenv from "dotenv";
+
+import bunyan from "bunyan";
 dotenv.config();
 
 class Config {
@@ -22,6 +24,10 @@ class Config {
 		this.SECRET_KEY2 = process.env.SECRET_KEY2 || "B";
 		this.CLIENT_URL = process.env.CLIENT_URL || "";
 		this.REDIS_HOST = process.env.REDIS_HOST || "";
+	}
+
+	public createLogger(name: string): bunyan {
+		return bunyan.createLogger({ name: name, level: "debug" });
 	}
 
 	public Validation(): void {
