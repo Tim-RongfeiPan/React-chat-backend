@@ -8,6 +8,7 @@ class Config {
 	public SECRET_KEY1: string | undefined;
 	public SECRET_KEY2: string | undefined;
 	public CLIENT_URL: string | undefined;
+	public REDIS_HOST: string | undefined;
 
 	private readonly DEFAULT_DATABASE_URL =
 		"mongodb://127.0.0.1:27017/React-chat-backend";
@@ -20,6 +21,7 @@ class Config {
 		this.SECRET_KEY1 = process.env.SECRET_KEY1 || "A";
 		this.SECRET_KEY2 = process.env.SECRET_KEY2 || "B";
 		this.CLIENT_URL = process.env.CLIENT_URL || "";
+		this.REDIS_HOST = process.env.REDIS_HOST || "";
 	}
 
 	public Validation(): void {

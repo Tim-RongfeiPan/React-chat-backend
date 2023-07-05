@@ -1,13 +1,13 @@
 import express, { Express } from "express";
 
 import { NodechatServer } from "./setupServer";
-import databaseConnection from "./setupDatabase";
+import dbConnection from "./setupDatabase";
 import { config } from "./config";
 
 class Application {
 	public initialize(): void {
 		this.loadConfig();
-		databaseConnection();
+		dbConnection();
 		const app: Express = express();
 		const server: NodechatServer = new NodechatServer(app);
 		server.start();
