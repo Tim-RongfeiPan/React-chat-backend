@@ -15,8 +15,8 @@ const joiValidation = (schema: ObjectSchema): IJoiDecorator => {
 
     descriptor.value = async (...args: any[]) => {
       const req: Request = args[0];
-      // const { error } = await Promise.resolve(schema.validate(req.body));
-      const { error } = await schema.validate(req.body);
+      const { error } = await Promise.resolve(schema.validate(req.body));
+      // const { error } = await schema.validate(req.body);
       if (error?.details)
         throw new JoiRequestValidationError(error.details[0].message);
       return originalMethod.apply(this, args);

@@ -10,6 +10,8 @@ import { Helpers } from '@global/helpers/helper';
 import { UploadApiResponse } from 'cloudinary';
 import { uploads } from '@global/helpers/cloudinary-upload';
 
+import HTTP_STATUS from 'http-status-codes';
+
 export class SignUp {
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
@@ -21,12 +23,12 @@ export class SignUp {
 
     const authObjectId: ObjectId = new ObjectId();
     const userObjectId: ObjectId = new ObjectId();
-    const uId = `${Helpers.generateRandomIntegers(99)}`;
+    const uId = `${Helpers.generateRandomIntegers(12)}`;
     const authData: IAuthDocument = SignUp.prototype.signupData({
       _id: authObjectId,
       uId,
-      username: Helpers.firstLetterUpperCase(username),
-      email: Helpers.lowerCase(email),
+      username,
+      email,
       password,
       avatarColor
     });
@@ -38,6 +40,10 @@ export class SignUp {
     )) as UploadApiResponse;
 
     if (!result?.public_id) throw new BadRequestError('File upload error!');
+
+    res
+      .status(HTTP_STATUS.CREATED)
+      .json({ message: 'User created successfully', authData });
   }
 
   private signupData(data: ISignUpData): IAuthDocument {

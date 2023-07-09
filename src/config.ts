@@ -16,14 +16,15 @@ class Config {
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
 
-  private readonly DEFAULT_DATABASE_URL = 'mongodb://127.0.0.1:27017/React-chat-backend';
+  private readonly DEFAULT_DATABASE_URL =
+    'mongodb://localhost:27017/React-chat-backend';
 
   constructor() {
     this.DATABASE_URL = process.env.DATABASE_URL || this.DEFAULT_DATABASE_URL;
-    this.JWT_TOKEN = process.env.JWT_TOKEN || '1';
+    this.JWT_TOKEN = process.env.JWT_TOKEN || '1234';
     this.NODE_ENV = process.env.NODE_ENV || '';
-    this.SECRET_KEY1 = process.env.SECRET_KEY1 || 'A';
-    this.SECRET_KEY2 = process.env.SECRET_KEY2 || 'B';
+    this.SECRET_KEY1 = process.env.SECRET_KEY1 || '';
+    this.SECRET_KEY2 = process.env.SECRET_KEY2 || '';
     this.CLIENT_URL = process.env.CLIENT_URL || '';
     this.REDIS_HOST = process.env.REDIS_HOST || '';
     this.CLOUD_NAME = process.env.CLOUD_NAME || '';

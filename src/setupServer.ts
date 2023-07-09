@@ -1,4 +1,12 @@
-import { Application, json, urlencoded, Request, Response, NextFunction, application } from 'express';
+import {
+  Application,
+  json,
+  urlencoded,
+  Request,
+  Response,
+  NextFunction,
+  application
+} from 'express';
 
 import http from 'http';
 
@@ -21,7 +29,7 @@ import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 import Logger from 'bunyan';
 
 const SERVER_PORT = 5000;
-const log: Logger = config.createLogger('setupServer');
+const log: Logger = config.createLogger('server');
 
 export class NodechatServer {
   private app: Application;
@@ -75,13 +83,15 @@ export class NodechatServer {
       });
     });
 
-    app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
-      log.error(error);
-      if (error instanceof CustomError) {
-        return res.status(error.statusCode).json(error.serializeErrors());
+    app.use(
+      (error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
+        log.error(error);
+        if (error instanceof CustomError) {
+          return res.status(error.statusCode).json(error.serializeErrors());
+        }
+        next();
       }
-      next();
-    });
+    );
   }
 
   private async startServer(app: Application): Promise<void> {
