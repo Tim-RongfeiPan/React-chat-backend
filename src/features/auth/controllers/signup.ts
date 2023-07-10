@@ -14,6 +14,10 @@ import { uploads } from '@global/helpers/cloudinary-upload';
 import HTTP_STATUS from 'http-status-codes';
 import { UserCache } from '@service/redis/user.cache';
 
+import { omit } from 'lodash';
+import { authQueue } from '@service/queues/auth.queue';
+import { userQueue } from '@service/queues/user.queue';
+
 const userCache: UserCache = new UserCache();
 
 export class SignUp {
@@ -52,6 +56,11 @@ export class SignUp {
     );
     userdataCache.profilePicture = `https://res.cloudinary.com/dipw3x1nz/image/upload/v${result.version}/${userObjectId}`;
     await userCache.saveUserCache(`${userObjectId}`, uId, userdataCache);
+
+    //add to database
+    omit(userdataCache, ['uid', 'username', 'email', 'avatorColor', 'password']);
+    authQueue.addAuthUserJob('addAuthUsertoDatabase', { value: userdataCache });
+    userQueue.addUserJob('addUserToDatabase', { value: userdataCache });
 
     res
       .status(HTTP_STATUS.CREATED)

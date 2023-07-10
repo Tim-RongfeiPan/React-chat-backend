@@ -6,6 +6,9 @@ import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import { config } from '@root/config';
+import { IAuthJob } from '@root/features/auth/interfaces/auth.interface';
+
+type IBaseJobdata = IAuthJob;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
@@ -39,5 +42,20 @@ export abstract class BaseQueue {
     this.queue.on('global:stalled', (jobId: string) => {
       this.log.info(`Job ${jobId} stalled`);
     });
+  }
+
+  protected addJob(name: string, data: IBaseJobdata): void {
+    this.queue.add(name, data, {
+      attempts: 3,
+      backoff: { type: 'fixed', delay: 5000 }
+    });
+  }
+
+  protected processJob(
+    name: string,
+    concurrency: number,
+    callback: Queue.ProcessCallbackFunction<void>
+  ): void {
+    this.queue.process(name, concurrency, callback);
   }
 }

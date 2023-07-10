@@ -3,6 +3,10 @@ import { Helpers } from '@global/helpers/helper';
 import { AuthModel } from '@root/features/auth/models/auth.schema';
 
 class AuthService {
+  public async createAuthUser(data: IAuthDocument): Promise<void> {
+    await AuthModel.create(data);
+  }
+
   public async getUserByusernameOremail(
     username: string,
     email: string
