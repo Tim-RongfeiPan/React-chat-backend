@@ -75,6 +75,15 @@ export class RequestLongError extends CustomError {
   }
 }
 
+export class NotAuthorizedError extends CustomError {
+  statusCode = HTTP_STATUS.UNAUTHORIZED;
+  status = 'error';
+
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export class ServiceError extends CustomError {
   statusCode = HTTP_STATUS.SERVICE_UNAVAILABLE;
   status = 'error';

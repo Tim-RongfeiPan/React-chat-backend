@@ -24,7 +24,7 @@ export class Helpers {
     return parseInt(result, 10);
   }
 
-  static parseJson(prop: string): any {
+  static parseJson(prop: string): string | void {
     try {
       JSON.parse(prop);
     } catch (error) {

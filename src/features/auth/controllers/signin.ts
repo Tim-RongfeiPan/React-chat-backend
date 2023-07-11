@@ -11,7 +11,6 @@ import { IAuthDocument } from '../interfaces/auth.interface';
 import { IUserDocument } from '@root/features/user/interfaces/user.interface';
 import { userService } from '@service/db/user.service';
 
-const log = config.createLogger('1');
 export class SignIn {
   @joiValidation(loginSchema)
   public async read(req: Request, res: Response): Promise<void> {

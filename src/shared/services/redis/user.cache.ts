@@ -76,7 +76,7 @@ export class UserCache extends BaseCache {
     }
   }
 
-  public async getUsersFromCache(userId: string): Promise<IUserDocument | null> {
+  public async getUserFromCache(userId: string): Promise<IUserDocument | null> {
     try {
       if (!this.client.isOpen) {
         await this.client.connect();

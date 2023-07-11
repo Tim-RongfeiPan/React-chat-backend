@@ -4,8 +4,7 @@ import {
   urlencoded,
   Request,
   Response,
-  NextFunction,
-  application
+  NextFunction
 } from 'express';
 
 import http from 'http';
@@ -51,6 +50,7 @@ export class NodechatServer {
         name: 'session',
         keys: [config.SECRET_KEY1!, config.SECRET_KEY2!],
         maxAge: 24 * 7 * 60 * 60 * 1000,
+        // maxAge: 10000,
         secure: config.NODE_ENV !== 'development'
       })
     );

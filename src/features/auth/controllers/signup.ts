@@ -23,8 +23,7 @@ const userCache: UserCache = new UserCache();
 export class SignUp {
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
-    const { username, email, password, avatarColor, avatarName, avatarImage } =
-      req.body;
+    const { username, email, password, avatarColor, avatarImage } = req.body;
     const checkifuserExist: IAuthDocument =
       await authService.getUserByusernameOremail(username, email);
     if (checkifuserExist) throw new BadRequestError('User already exists!');
