@@ -4,6 +4,10 @@ import { AuthModel } from '@root/features/auth/models/auth.schema';
 import { IUserDocument } from '@root/features/user/interfaces/user.interface';
 import { UserModel } from '@root/features/user/models/user.schema';
 import mongoose from 'mongoose';
+import Logger from 'bunyan';
+import { config } from '@root/config';
+
+const log = config.createLogger('1');
 
 class UserService {
   public async addUserData(data: IUserDocument): Promise<void> {
@@ -41,7 +45,6 @@ class UserService {
       { $unwind: '$authId' },
       { $project: this.aggregateProject() }
     ]);
-    console.log(users);
     return users[0];
   }
 

@@ -8,7 +8,10 @@ import { BadRequestError } from '@global/helpers/error-handler';
 import { config } from '@root/config';
 import { authService } from '@service/db/auth.service';
 import { IAuthDocument } from '../interfaces/auth.interface';
+import { IUserDocument } from '@root/features/user/interfaces/user.interface';
+import { userService } from '@service/db/user.service';
 
+const log = config.createLogger('1');
 export class SignIn {
   @joiValidation(loginSchema)
   public async read(req: Request, res: Response): Promise<void> {
@@ -19,9 +22,12 @@ export class SignIn {
     const passwordMatch: boolean = await existsUser.comparePassword(password);
     if (!passwordMatch) throw new BadRequestError('Invalid password');
 
+    const user: IUserDocument = await userService.getUserByAuthId(
+      `${existsUser._id}`
+    );
     const userJwt: string = JWT.sign(
       {
-        userId: existsUser._id,
+        userId: user._id,
         uId: existsUser.uId,
         email: existsUser.email,
         username: existsUser.username,
@@ -30,9 +36,20 @@ export class SignIn {
       config.JWT_TOKEN!
     );
     req.session = { jwt: userJwt };
+
+    const userDocument: IUserDocument = {
+      ...user,
+      authId: existsUser!._id,
+      username: existsUser!.username,
+      email: existsUser!.email,
+      avatarColor: existsUser!.avatarColor,
+      uId: existsUser!.uId,
+      createdAt: existsUser!.createdAt
+    } as IUserDocument;
+
     res.status(HTTP_STATUS.OK).json({
       message: 'User login successfully',
-      user: existsUser,
+      user: userDocument,
       token: userJwt
     });
   }
