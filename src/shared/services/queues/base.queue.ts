@@ -1,14 +1,14 @@
 import Queue, { Job } from 'bull';
-
 import Logger from 'bunyan';
-import { createBullBoard } from '@bull-board/api';
 
+import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import { config } from '@root/config';
 import { IAuthJob } from '@root/features/auth/interfaces/auth.interface';
+import { IUserJob } from '@root/features/user/interfaces/user.interface';
 
-type IBaseJobdata = IAuthJob;
+type IBaseJobdata = IAuthJob | IUserJob;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
@@ -26,7 +26,7 @@ export abstract class BaseQueue {
 
     createBullBoard({
       queues: bullAdapters,
-      serverAdapter
+      serverAdapter: serverAdapter
     });
 
     this.log = config.createLogger(`${queueName}Queue`);

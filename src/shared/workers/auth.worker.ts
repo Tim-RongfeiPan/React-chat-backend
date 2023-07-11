@@ -3,9 +3,9 @@ import { authService } from '@service/db/auth.service';
 import { DoneCallback, Job } from 'bull';
 import Logger from 'bunyan';
 
-const log: Logger = config.createLogger('authWorkers');
+const log: Logger = config.createLogger('authWorker');
 
-class AuthWorkers {
+class AuthWorker {
   async addAuthUsertoDatabase(job: Job, done: DoneCallback): Promise<void> {
     try {
       const { value } = job.data;
@@ -19,4 +19,4 @@ class AuthWorkers {
   }
 }
 
-export const authWorkers: AuthWorkers = new AuthWorkers();
+export const authWorker: AuthWorker = new AuthWorker();
