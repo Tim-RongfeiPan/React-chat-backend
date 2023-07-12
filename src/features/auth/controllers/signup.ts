@@ -49,7 +49,7 @@ export class SignUp {
     if (!result?.public_id) throw new BadRequestError('File upload error!');
 
     //add to redis cache
-    let userdataCache: IUserDocument = SignUp.prototype.userData(
+    const userdataCache: IUserDocument = SignUp.prototype.userData(
       authData,
       userObjectId
     );
@@ -57,13 +57,13 @@ export class SignUp {
     await userCache.saveUserCache(`${userObjectId}`, uId, userdataCache);
 
     //add to database
-    userdataCache = omit(userdataCache, [
-      'uId',
-      'username',
-      'email',
-      'avatarColor',
-      'password'
-    ]);
+    // userdataCache = omit(userdataCache, [
+    //   'uId',
+    //   'username',
+    //   'email',
+    //   'avatarColor',
+    //   'password'
+    // ]);
     // omit(userdataCache, ['uId', 'username', 'email', 'avatarColor', 'password']);
     authQueue.addAuthUserJob('addAuthUsertoDatabase', { value: authData });
     userQueue.addUserJob('addUserToDatabase', { value: userdataCache });
