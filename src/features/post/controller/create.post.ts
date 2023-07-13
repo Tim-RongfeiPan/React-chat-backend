@@ -6,7 +6,7 @@ import HTTP_STATUS from 'http-status-codes';
 import { IPostDocument } from '@post/interfaces/post.interface';
 import { PostCache } from '@service/redis/post.cache';
 import { socketIOPostObject } from '@socket/post.socket';
-// import { postQueue } from '@service/queues/post.queue';
+import { postQueue } from '@service/queues/post.queue';
 import { UploadApiResponse } from 'cloudinary';
 import { uploads } from '@global/helpers/cloudinary-upload';
 import { BadRequestError } from '@global/helpers/error-handler';
@@ -43,10 +43,10 @@ export class Create {
       uId: `${req.currentUser!.uId}`,
       createdPost
     });
-    // postQueue.addPostJob('addPostToDB', {
-    //   key: req.currentUser!.userId,
-    //   value: createdPost
-    // });
+    postQueue.addPostJob('addPostToDB', {
+      key: req.currentUser!.userId,
+      value: createdPost
+    });
     res.status(HTTP_STATUS.CREATED).json({ message: 'Post created successfully' });
   }
 
@@ -79,18 +79,17 @@ export class Create {
       createdAt: new Date(),
       reactions: { like: 0, love: 0, happy: 0, sad: 0, wow: 0, angry: 0 }
     } as IPostDocument;
-    // socketIOPostObject.emit('add post', createdPost);
-    // await postCache.savePostToCache({
-    //   key: postObjectId,
-    //   currentUserId: `${req.currentUser!.userId}`,
-    //   uId: `${req.currentUser!.uId}`,
-    //   createdPost
-    // });
-    // postQueue.addPostJob('addPostToDB', {
-    //   key: req.currentUser!.userId,
-    //   value: createdPost
-    // });
-    // call image queue to add image to mongodb database
+    socketIOPostObject.emit('add post', createdPost);
+    await postCache.savePostToCache({
+      key: postObjectId,
+      currentUserId: `${req.currentUser!.userId}`,
+      uId: `${req.currentUser!.uId}`,
+      createdPost
+    });
+    postQueue.addPostJob('addPostToDB', {
+      key: req.currentUser!.userId,
+      value: createdPost
+    });
 
     res
       .status(HTTP_STATUS.CREATED)
