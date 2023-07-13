@@ -26,6 +26,7 @@ import appRoutes from '@root/routes';
 import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 
 import Logger from 'bunyan';
+import { SocketIOPostHandler } from '@socket/post.socket';
 
 const SERVER_PORT = 5000;
 const log: Logger = config.createLogger('server');
@@ -127,6 +128,6 @@ export class NodechatServer {
   }
 
   private socketIOConnections(io: Server): void {
-    log.info('socketIOConnections');
+    const postSocketHandler: SocketIOPostHandler = new SocketIOPostHandler(io);
   }
 }

@@ -11,6 +11,7 @@ declare global {
 }
 
 export interface AuthPayload {
+  //current user info type
   userId: string;
   uId: string;
   email: string;

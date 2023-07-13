@@ -24,7 +24,7 @@ const postSchema: Schema = new Schema({
     angry: { type: Number, default: 0 }
   },
   createdAt: { type: Date, default: Date.now }
-});
+}); //schema in mongodb
 
 const PostModel: Model<IPostDocument> = model<IPostDocument>(
   'Post',

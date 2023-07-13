@@ -28,7 +28,7 @@ export interface IPostDocument extends Document {
   privacy?: string;
   reactions?: IReactions;
   createdAt?: Date;
-}
+} // document as in mongodb database
 
 export interface IGetPostsQuery {
   _id?: ObjectId | string;
