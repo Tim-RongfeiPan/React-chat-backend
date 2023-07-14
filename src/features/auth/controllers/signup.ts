@@ -53,7 +53,7 @@ export class SignUp {
       authData,
       userObjectId
     );
-    userdataCache.profilePicture = `https://res.cloudinary.com/dyamr9ym3/image/upload/v${result.version}/${userObjectId}`;
+    userdataCache.profilePicture = `https://res.cloudinary.com/dipw3x1nz/image/upload/v${result.version}/${userObjectId}`;
     await userCache.saveUserCache(`${userObjectId}`, uId, userdataCache);
 
     //add to database
