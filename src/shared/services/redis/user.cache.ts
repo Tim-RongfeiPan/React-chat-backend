@@ -78,11 +78,9 @@ export class UserCache extends BaseCache {
 
   public async getUserFromCache(userId: string): Promise<IUserDocument | null> {
     try {
-      if (!this.client.isOpen) {
-        await this.client.connect();
-      }
+      if (!this.client.isOpen) await this.client.connect();
       const response: IUserDocument = (await this.client.HGETALL(
-        `users${userId}`
+        `users:${userId}`
       )) as unknown as IUserDocument;
       response.createdAt = new Date(Helpers.parseJson(`${response.createdAt}`));
       response.postsCount = Helpers.parseJson(`${response.postsCount}`);
