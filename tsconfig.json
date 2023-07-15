@@ -30,7 +30,7 @@
       "@reaction/*": ["src/features/reactions/*"],
       "@comment/*": ["src/features/comments/*"],
       "@follower/*": ["src/features/followers/*"],
-      "@notification/*": ["src/features/notifications/*"],
+      "@notification/*": ["src/features/notification/*"],
       "@image/*": ["src/features/images/*"],
       "@chat/*": ["src/features/chat/*"],
       "@global/*": ["src/shared/globals/*"],

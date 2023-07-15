@@ -10,14 +10,22 @@ import { IEmailJob, IUserJob } from '@root/features/user/interfaces/user.interfa
 import { IPostJobData } from '@post/interfaces/post.interface';
 import { IReactionJob } from '@reaction/interfaces/reaction.interface';
 import { ICommentJob } from '@comment/interfaces/comment.interface';
+import { INotificationJobData } from '@notification/interfaces/notification.interface';
+import {
+  IBlockedUserJobData,
+  IFollowerJobData
+} from '@follower/interfaces/follower.interface';
 
 type IBaseJobdata =
   | IAuthJob
-  | IUserJob
   | IEmailJob
   | IPostJobData
   | IReactionJob
-  | ICommentJob;
+  | ICommentJob
+  | IFollowerJobData
+  | IBlockedUserJobData
+  | INotificationJobData
+  | IUserJob;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
