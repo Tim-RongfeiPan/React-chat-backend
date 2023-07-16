@@ -15,6 +15,7 @@ import {
   IBlockedUserJobData,
   IFollowerJobData
 } from '@follower/interfaces/follower.interface';
+import { IChatJobData, IMessageData } from '@chat/interfaces/chat.interface';
 
 type IBaseJobdata =
   | IAuthJob
@@ -25,7 +26,8 @@ type IBaseJobdata =
   | IFollowerJobData
   | IBlockedUserJobData
   | INotificationJobData
-  | IUserJob;
+  | IMessageData
+  | IChatJobData;
 
 let bullAdapters: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
