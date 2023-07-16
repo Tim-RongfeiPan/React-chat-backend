@@ -1,13 +1,26 @@
 import { config } from '@root/config';
-import { IUserDocument } from '@user/interfaces/user.interface';
+import {
+  INotificationSettings,
+  ISocialLinks,
+  IUserDocument
+} from '@user/interfaces/user.interface';
 import { BaseCache } from '@service/redis/base.cache';
 import { ServiceError } from '@global/helpers/error-handler';
+import { RedisCommandRawReply } from '@redis/client/dist/lib/commands';
 
 import Logger from 'bunyan';
 import { Helpers } from '@global/helpers/helper';
 
 const log: Logger = config.createLogger('userCache');
 
+type UserItem = string | ISocialLinks | INotificationSettings;
+type UserCacheMultiType =
+  | string
+  | number
+  | Buffer
+  | RedisCommandRawReply[]
+  | IUserDocument
+  | IUserDocument[];
 export class UserCache extends BaseCache {
   constructor() {
     super('userCache');
@@ -99,6 +112,39 @@ export class UserCache extends BaseCache {
       response.quote = Helpers.parseJson(`${response.quote}`);
 
       return response;
+    } catch (error) {
+      log.error(error);
+      throw new ServiceError('Server error. Try again.');
+    }
+  }
+
+  public async updateSingleUserItemInCache(
+    userId: string,
+    prop: string,
+    value: UserItem
+  ): Promise<IUserDocument | null> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      await this.client.HSET(`users:${userId}`, `${prop}`, JSON.stringify(value));
+      const response: IUserDocument = (await this.getUserFromCache(
+        userId
+      )) as IUserDocument;
+      return response;
+    } catch (error) {
+      log.error(error);
+      throw new ServiceError('Server error. Try again.');
+    }
+  }
+
+  public async getTotalUsersInCache(): Promise<number> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      const count: number = await this.client.ZCARD('user');
+      return count;
     } catch (error) {
       log.error(error);
       throw new ServiceError('Server error. Try again.');
