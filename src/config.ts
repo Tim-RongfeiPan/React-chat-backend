@@ -26,6 +26,8 @@ class Config {
   public GOOGLE_AUTH_REFRESH_TOKEN: string | undefined;
   public GOOGLE_AUTH_ACCESS_TOKEN: string | undefined;
 
+  public EC2_URL: string | undefined;
+
   private readonly DEFAULT_DATABASE_URL =
     'mongodb://localhost:27017/React-chat-backend';
 
@@ -49,6 +51,8 @@ class Config {
     this.GOOGLE_AUTH_CLIENT_SECRET = process.env.GOOGLE_AUTH_CLIENT_SECRET || '';
     this.GOOGLE_AUTH_REFRESH_TOKEN = process.env.GOOGLE_AUTH_REFRESH_TOKEN || '';
     this.GOOGLE_AUTH_ACCESS_TOKEN = process.env.GOOGLE_AUTH_ACCESS_TOKEN || '';
+
+    this.EC2_URL = process.env.EC2_URL || '';
   }
 
   public createLogger(name: string): bunyan {
