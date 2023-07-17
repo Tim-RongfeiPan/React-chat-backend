@@ -17,6 +17,7 @@ import compression from 'compression';
 import cookieSession from 'cookie-session';
 
 import HTTP_STATUS from 'http-status-codes';
+import apiStats from 'swagger-stats';
 import { Server } from 'socket.io';
 import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
@@ -46,6 +47,7 @@ export class NodechatServer {
     this.securityMiddleware(this.app);
     this.standardMiddleware(this.app);
     this.routesMiddleware(this.app);
+    this.apiMonitoring(this.app);
     this.globalErrorHandler(this.app);
     this.startServer(this.app);
   }
@@ -101,6 +103,9 @@ export class NodechatServer {
   }
 
   private async startServer(app: Application): Promise<void> {
+    if (!config.JWT_TOKEN) {
+      throw new Error('JWT_TOKEN must be provided');
+    }
     try {
       const httpServer: http.Server = new http.Server(app);
       const socketIO: Server = await this.creatSocketIO(httpServer);
@@ -109,6 +114,14 @@ export class NodechatServer {
     } catch (error) {
       log.error(error);
     }
+  }
+
+  private apiMonitoring(app: Application): void {
+    app.use(
+      apiStats.getMiddleware({
+        uriPath: '/api-monitoring'
+      })
+    );
   }
 
   private async creatSocketIO(httpServer: http.Server): Promise<Server> {
@@ -126,6 +139,7 @@ export class NodechatServer {
   }
 
   private starthttpServer(httpServer: http.Server): void {
+    log.info(`Worker with process id of ${process.pid} has started...`);
     log.info(`Server started with process ${process.pid}`);
     httpServer.listen(SERVER_PORT, () => {
       log.info(`Server running on port ${SERVER_PORT}`);
@@ -145,8 +159,8 @@ export class NodechatServer {
     postSocketHandler.listen();
     followerSocketHandler.listen();
     userSocketHandler.listen();
+    chatSocketHandler.listen();
     notificationSocketHandler.listen(io);
     imageSocketHandler.listen(io);
-    chatSocketHandler.listen();
   }
 }

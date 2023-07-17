@@ -39,5 +39,9 @@
       "@worker/*": ["src/shared/workers/*"],
       "@root/*": ["src/*"]
     }
+  },
+
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
   }
 }

@@ -6,8 +6,8 @@ import { config } from '@root/config';
 import { BadRequestError } from '@global/helpers/error-handler';
 
 interface IMailOptions {
-  from: string; //email
-  to: string; //email
+  from: string;
+  to: string;
   subject: string;
   html: string;
 }
