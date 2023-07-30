@@ -16,9 +16,11 @@ import { notificationTemplate } from '@service/emails/templates/notification/not
 import { emailQueue } from '@service/queues/email.queue';
 import { MessageCache } from '@service/redis/message.cache';
 import { chatQueue } from '@service/queues/chat.queue';
+import { config } from '@root/config';
 
 const userCache: UserCache = new UserCache();
 const messageCache: MessageCache = new MessageCache();
+const logger = config.createLogger('chatmessage');
 
 export class Add {
   @joiValidation(addChatSchema)
@@ -34,6 +36,7 @@ export class Add {
       isRead,
       selectedImage
     } = req.body;
+    // logger.info(req.body);
     const messageObjectId: ObjectId = new ObjectId();
     const conversationObjectId: ObjectId = !conversationId
       ? new ObjectId()
@@ -46,7 +49,7 @@ export class Add {
     let fileUrl = '';
     if (selectedImage.length) {
       const result: UploadApiResponse = (await uploads(
-        req.body.image,
+        req.body.selectedImage,
         req.currentUser!.userId,
         true,
         true
