@@ -49,18 +49,18 @@ class MailTransport {
       // clientSecret: config.GOOGLE_AUTH_CLIENT_SECRET!,
       // refreshToken: config.GOOGLE_AUTH_REFRESH_TOKEN!,
       // accessToken: config.GOOGLE_AUTH_ACCESS_TOKEN!
-      // }
     });
 
     const mailOptions: IMailOptions = {
-      from: ` Chatty App <${config.SENDER_EMAIL!}>`,
-      to: receiverEmail,
+      from: ` React chat <${config.SENDER_EMAIL!}>`,
+      to: ` React chat receiver <${receiverEmail}>`,
       subject, //email topic
       html: body
     };
-
+    log.info(receiverEmail);
     try {
-      await transporter.sendMail(mailOptions);
+      const result = await transporter.sendMail(mailOptions);
+      log.info(result);
       log.info('Development email sent successfully.');
     } catch (error) {
       log.error('Error sending email', error);

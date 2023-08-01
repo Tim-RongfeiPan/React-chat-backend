@@ -11,8 +11,11 @@ import { socketIOImageObject } from '@socket/image';
 import { imageQueue } from '@service/queues/image.queue';
 import { IBgUploadResponse } from '@image/interfaces/image.interface';
 import { Helpers } from '@global/helpers/helper';
+import Logger from 'bunyan';
+import { config } from '@root/config';
 
 const userCache: UserCache = new UserCache();
+const log = config.createLogger('addimages');
 
 export class Add {
   @joiValidation(addImageSchema)
