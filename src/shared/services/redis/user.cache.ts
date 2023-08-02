@@ -5,7 +5,7 @@ import {
   IUserDocument
 } from '@user/interfaces/user.interface';
 import Logger from 'bunyan';
-import { indexOf, findIndex } from 'lodash';
+import { indexOf, findIndex, floor } from 'lodash';
 import { config } from '@root/config';
 import { ServiceError } from '@global/helpers/error-handler';
 import { Helpers } from '@global/helpers/helper';
@@ -198,12 +198,10 @@ export class UserCache extends BaseCache {
     excludedUsername: string
   ): Promise<IUserDocument[]> {
     try {
-      if (!this.client.isOpen) {
-        await this.client.connect();
-      }
+      if (!this.client.isOpen) await this.client.connect();
       const replies: IUserDocument[] = [];
       const followers: string[] = await this.client.LRANGE(
-        `followers:${userId}`,
+        `following:${userId}`,
         0,
         -1
       );

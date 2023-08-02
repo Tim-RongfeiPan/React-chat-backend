@@ -57,7 +57,6 @@ class MailTransport {
       subject, //email topic
       html: body
     };
-    log.info(receiverEmail);
     try {
       const result = await transporter.sendMail(mailOptions);
       log.info(result);

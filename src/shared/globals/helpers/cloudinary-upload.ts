@@ -10,7 +10,7 @@ export function uploads(
   overwrite?: boolean,
   invalidate?: boolean
 ): Promise<UploadApiResponse | UploadApiErrorResponse | undefined> {
-  // log.info(file.substring(0, 11));
+  log.info(file);
   if (file.substring(0, 11) === 'data:/image')
     file = file.substring(0, 5) + file.substring(6, file.length);
   return new Promise((resolve) => {

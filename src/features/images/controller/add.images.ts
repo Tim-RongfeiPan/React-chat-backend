@@ -48,7 +48,8 @@ export class Add {
   @joiValidation(addImageSchema)
   public async backgroundImage(req: Request, res: Response): Promise<void> {
     const { version, publicId }: IBgUploadResponse =
-      await Add.prototype.backgroundUpload(req.body.image);
+      await Add.prototype.backgroundUpload(req.body.image, req.currentUser!.userId);
+    log.info(version, publicId, req.body.image);
     const bgImageId: Promise<IUserDocument> = userCache.updateSingleUserItemInCache(
       `${req.currentUser!.userId}`,
       'bgImageId',
@@ -77,23 +78,32 @@ export class Add {
     res.status(HTTP_STATUS.OK).json({ message: 'Image added successfully' });
   }
 
-  private async backgroundUpload(image: string): Promise<IBgUploadResponse> {
-    const isDataURL = Helpers.isDataURL(image);
+  private async backgroundUpload(
+    image: string,
+    userId: string
+  ): Promise<IBgUploadResponse> {
+    // const isDataURL = Helpers.isDataURL(image);
     let version = '';
     let publicId = '';
-    if (isDataURL) {
-      const result: UploadApiResponse = (await uploads(image)) as UploadApiResponse;
-      if (!result.public_id) {
-        throw new BadRequestError(result.message);
-      } else {
-        version = result.version.toString();
-        publicId = result.public_id;
-      }
+    // log.info(isDataURL);
+    // if (isDataURL) {
+    const result: UploadApiResponse = (await uploads(
+      image,
+      userId,
+      true,
+      true
+    )) as UploadApiResponse;
+    if (!result.public_id) {
+      throw new BadRequestError(result.message);
     } else {
-      const value = image.split('/');
-      version = value[value.length - 2];
-      publicId = value[value.length - 1];
+      version = result.version.toString();
+      publicId = result.public_id;
     }
-    return { version: version.replace(/v/g, ''), publicId };
+    // } else {
+    //   const value = image.split('/');
+    //   version = value[value.length - 2];
+    //   publicId = value[value.length - 1];
+    // }
+    return { version: version, publicId };
   }
 }

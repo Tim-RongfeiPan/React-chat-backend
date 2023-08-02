@@ -35,6 +35,8 @@ export class Helpers {
   }
 
   static isDataURL(value: string): boolean {
+    if (value.substring(0, 11) === 'data:/image')
+      value = value.substring(0, 5) + value.substring(6, value.length);
     const dataUrlRegex =
       /^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\\/?%\s]*)\s*$/i;
     return dataUrlRegex.test(value);
